@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast correctMessage = Toast.makeText(MainActivity.this, R.string.correct_toast, Toast.LENGTH_SHORT);
                 correctMessage.setGravity(Gravity.TOP, 0, 200);
                 correctMessage.show();
+                //comment for github commit
             }
         });
 
