@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +13,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final String KEY_INDEX = "index";
+    int mTrueAnswer = 0;
+    int mCurrentNumAnswered = 0;
+
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mQuestionsAnswered = savedInstanceState.getBooleanArray(TAG);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -73,11 +76,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private boolean[] mQuestionsAnswered = new boolean[mQuestionBank.length];
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBooleanArray(TAG, mQuestionsAnswered);
     }
 
     @Override
@@ -111,8 +117,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateQuestion() {
+        mTrueButton.setEnabled(!mQuestionsAnswered[mCurrentIndex]);
+        mFalseButton.setEnabled(!mQuestionsAnswered[mCurrentIndex]);
         int question=mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+        mCurrentNumAnswered++;
+
+        int resultResId = (mTrueAnswer/6)*100;
+        if (mCurrentNumAnswered == mQuestionBank.length + 1) {
+            Toast.makeText(this, Integer.toString(resultResId) + "%", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void checkAnswer(boolean userPressedTrue) {
@@ -121,10 +136,15 @@ public class MainActivity extends AppCompatActivity {
 
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
+            mTrueAnswer++;
         } else {
             messageResId = R.string.incorrect_toast;
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+
+        mQuestionsAnswered[mCurrentIndex] = true;
+        mTrueButton.setEnabled(false);
+        mFalseButton.setEnabled(false);
     }
 }
