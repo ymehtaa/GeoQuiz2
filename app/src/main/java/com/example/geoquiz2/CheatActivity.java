@@ -13,7 +13,9 @@ public class CheatActivity extends AppCompatActivity {
 
     private static final String EXTRA_ANSWER_IS_TRUE = "com.example.geoquiz2.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.example.geoquiz2.answer_shown";
+    private static final String KEY_CHEAT = "IS_CHEAT";
     private boolean mAnswerIsTrue;
+    private boolean mIsAnswer = false;
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
 
@@ -31,6 +33,10 @@ public class CheatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
+
+        if (savedInstanceState != null) {
+            mIsAnswer = savedInstanceState.getBoolean(KEY_CHEAT, false);
+        }
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
@@ -52,5 +58,17 @@ public class CheatActivity extends AppCompatActivity {
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
         setResult(RESULT_OK, data);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_CHEAT, mIsAnswer);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setAnswerShownResult(mIsAnswer);
+        super.onBackPressed();
     }
 }
