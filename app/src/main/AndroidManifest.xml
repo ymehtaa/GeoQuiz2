@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoQuiz2">
-
+        <activity android:name=".euroActivity"></activity>
+        <activity android:name=".asiaActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".CheatActivity" />
+        <activity android:name=".NorthActivity" />
         <activity android:name=".InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,9 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".CheatActivity" />
-        <activity android:name=".NorthActivity"></activity>
     </application>
 
 </manifest>

@@ -17,14 +17,15 @@ public class NorthActivity extends AppCompatActivity {
     private static final String KEY_INDEX = "index";
     int mTrueAnswer = 0;
     int mCurrentNumAnswered = 0;
-    private static final int REQUEST_CODE_CHEAT = 0;
-    private boolean mIsCheater;
+    //private static final int REQUEST_CODE_CHEAT = 0;
+    //private boolean mIsCheater;
 
 
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
-    private Button mCheatButton;
+    private Button homeButton;
+    //private Button mCheatButton;
 
     private TextView mQuestionTextView;
 
@@ -68,12 +69,18 @@ public class NorthActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex=(mCurrentIndex + 1) % mQuestionBank.length;
-                mIsCheater = false;
+                //mIsCheater = false;
                 updateQuestion();
             }
         });
-
-        mCheatButton = (Button)findViewById(R.id.cheat_button);
+        homeButton = findViewById(R.id.home_button);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NorthActivity.this, InitActivity.class);
+            }
+        });
+        /*mCheatButton = (Button)findViewById(R.id.cheat_button);
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +89,7 @@ public class NorthActivity extends AppCompatActivity {
                 Intent intent = CheatActivity.newIntent(NorthActivity.this, answerIsTrue);
                 startActivityForResult(intent, REQUEST_CODE_CHEAT);
             }
-        });
+        }); */
 
         updateQuestion();
 
@@ -95,12 +102,12 @@ public class NorthActivity extends AppCompatActivity {
             return;
         }
 
-        if (requestCode == REQUEST_CODE_CHEAT) {
+        /*if (requestCode == REQUEST_CODE_CHEAT) {
             if (data == null) {
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
-        }
+        } */
     }
 
     private boolean[] mQuestionsAnswered = new boolean[mQuestionBank.length];
@@ -150,10 +157,10 @@ public class NorthActivity extends AppCompatActivity {
         mQuestionTextView.setText(question);
         mCurrentNumAnswered++;
 
-        int resultResId = (mTrueAnswer/6)*100;
+        /*int resultResId = (mTrueAnswer/6)*100;
         if (mCurrentNumAnswered == mQuestionBank.length + 1) {
             Toast.makeText(this, Integer.toString(resultResId) + "%", Toast.LENGTH_LONG).show();
-        }
+        }*/
 
     }
 
@@ -161,16 +168,16 @@ public class NorthActivity extends AppCompatActivity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
 
-        if (mIsCheater){
+        /*if (mIsCheater){
             messageResId = R.string.judgment_toast;
-        } else {
+        } else { */
             if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.correct_toast;
                 mTrueAnswer++;
             } else {
                 messageResId = R.string.incorrect_toast;
             }
-        }
+        //}
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
 
         mQuestionsAnswered[mCurrentIndex] = true;

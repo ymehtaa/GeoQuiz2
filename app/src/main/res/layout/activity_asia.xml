@@ -75,6 +75,4 @@
         android:drawableLeft="@drawable/arrow_left"
         android:drawablePadding="4dp"
         android:text="Home" />
-
-
 </LinearLayout>
