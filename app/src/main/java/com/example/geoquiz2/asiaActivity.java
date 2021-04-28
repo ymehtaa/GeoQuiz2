@@ -31,6 +31,11 @@ public class asiaActivity extends AppCompatActivity {
 
     private Question[]mQuestionBank = new Question[] {
             new Question(R.string.question_asia1, false),
+            new Question(R.string.question_asia2, true),
+            new Question(R.string.question_asia3, true),
+            new Question(R.string.question_asia4, true),
+            new Question(R.string.question_asia5, false),
+            new Question(R.string.question_asia6, false),
     };
 
     private int mCurrentIndex = 0;

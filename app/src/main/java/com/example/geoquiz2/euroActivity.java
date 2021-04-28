@@ -31,6 +31,11 @@ public class euroActivity extends AppCompatActivity {
 
     private Question[]mQuestionBank = new Question[] {
             new Question(R.string.question_europe1, false),
+            new Question(R.string.question_europe2, false),
+            new Question(R.string.question_europe3, true),
+            new Question(R.string.question_europe4, true),
+            new Question(R.string.question_europe5, true),
+            new Question(R.string.question_europe6, true),
     };
 
     private int mCurrentIndex = 0;

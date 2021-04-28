@@ -31,6 +31,12 @@ public class NorthActivity extends AppCompatActivity {
 
     private Question[]mQuestionBank = new Question[] {
             new Question(R.string.question_north1, true),
+            new Question(R.string.question_north2, true),
+            new Question(R.string.question_north3, true),
+            new Question(R.string.question_north4, true),
+            new Question(R.string.question_north5, false),
+            new Question(R.string.question_north6, false),
+
     };
 
     private int mCurrentIndex = 0;
