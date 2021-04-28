@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InitActivity">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/question_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -19,42 +21,50 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="67dp"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
 
+        android:layout_marginTop="67dp"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
         android:paddingRight="16dp"
         app:layout_constraintStart_toStartOf="@+id/question_text_view"
         app:layout_constraintTop_toTopOf="@+id/question_text_view">
 
         <Button
-            android:id="@+id/america_button"
+            android:id="@+id/true_button"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="North America" />
+            android:text="@string/true_button" />
+
 
         <Button
-            android:id="@+id/asia_button"
+            android:id="@+id/false_button"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Asia" />
-
-        <Button
-            android:id="@+id/europe_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Europe" />
-
-        <Button
-            android:id="@+id/random_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Random" />
+            android:gravity="center"
+            android:text="@string/false_button" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/cheat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cheat_button" />
+
+    <Button
+        android:id="@+id/next_button"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/arrow_right"
+        android:drawablePadding="4dp"
+        android:text="@string/next_button" />
+
 </LinearLayout>

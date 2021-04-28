@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class NorthActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final String KEY_INDEX = "index";
@@ -29,12 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mQuestionTextView;
 
     private Question[]mQuestionBank = new Question[] {
-            new Question(R.string.question_random1, true),
-            new Question(R.string.question_random2, true),
-            new Question(R.string.question_random3, false),
-            new Question(R.string.question_random4, false),
-            new Question(R.string.question_random5, true),
-            new Question(R.string.question_random6, true),
+            new Question(R.string.question_north1, true),
     };
 
     private int mCurrentIndex = 0;
@@ -84,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Start CheatActivity
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-                Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue);
+                Intent intent = CheatActivity.newIntent(NorthActivity.this, answerIsTrue);
                 startActivityForResult(intent, REQUEST_CODE_CHEAT);
             }
         });
