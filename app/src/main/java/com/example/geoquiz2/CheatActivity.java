@@ -11,21 +11,25 @@ import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
 
-    private static final String EXTRA_ANSWER_IS_TRUE = "com.example.geoquiz2.answer_is_true";
-    private static final String EXTRA_ANSWER_SHOWN = "com.example.geoquiz2.answer_shown";
-    private static final String KEY_CHEAT = "IS_CHEAT";
+    private static final String EXTRA_ANSWER_IS_TRUE =
+            "com.bignerdranch.android.geoquiz.answer_is_true";
+    private static final String EXTRA_ANSWER_SHOWN =
+            "com.bignerdranch.android.geoquiz.answer_shown";
+    private static final String KEY_ANSWER_SHOWN =
+            "answer is shown";
+
     private boolean mAnswerIsTrue;
-    private boolean mIsAnswer = false;
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
+    private boolean mAnswerIsShown;
 
-    public static Intent newIntent (Context packageContext, boolean answerIsTrue) {
-        Intent intent = new Intent (packageContext, CheatActivity.class);
+    public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
+        Intent intent = new Intent(packageContext, CheatActivity.class);
         intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
         return intent;
     }
 
-    public static boolean wasAnswerShown(Intent result) {
+    public static boolean wasAnswerShown (Intent result) {
         return result.getBooleanExtra(EXTRA_ANSWER_SHOWN, false);
     }
 
@@ -35,10 +39,11 @@ public class CheatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cheat);
 
         if (savedInstanceState != null) {
-            mIsAnswer = savedInstanceState.getBoolean(KEY_CHEAT, false);
+            mAnswerIsShown = savedInstanceState.getBoolean(KEY_ANSWER_SHOWN, false);
         }
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
 
         mShowAnswerButton = (Button) findViewById(R.id.show_answer_button);
@@ -50,10 +55,12 @@ public class CheatActivity extends AppCompatActivity {
                 } else {
                     mAnswerTextView.setText(R.string.false_button);
                 }
-                setAnswerShownResult(true);
+                mAnswerIsShown = true;
+                setAnswerShownResult(mAnswerIsShown);
             }
         });
     }
+
     private void setAnswerShownResult(boolean isAnswerShown) {
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
@@ -61,14 +68,8 @@ public class CheatActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_CHEAT, mIsAnswer);
-    }
-
-    @Override
-    public void onBackPressed() {
-        setAnswerShownResult(mIsAnswer);
-        super.onBackPressed();
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(KEY_ANSWER_SHOWN, mAnswerIsShown);
     }
 }

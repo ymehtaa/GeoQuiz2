@@ -13,23 +13,18 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
-    int mTrueAnswer = 0;
-    int mCurrentNumAnswered = 0;
-    //private static final int REQUEST_CODE_CHEAT = 0;
-    //private boolean mIsCheater;
-
+    private static final String ANSWER_SHOWN = "show";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
-    private Button homeButton;
-    //private Button mCheatButton;
-
+    private Button mCheatButton;
     private TextView mQuestionTextView;
 
-    private Question[]mQuestionBank = new Question[] {
+    private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_random1, true),
             new Question(R.string.question_random2, true),
             new Question(R.string.question_random3, false),
@@ -38,7 +33,12 @@ public class MainActivity extends AppCompatActivity {
             new Question(R.string.question_random6, true),
     };
 
+    private boolean[] mQuestionAnswered = {false, false, false, false, false ,false};
+
     private int mCurrentIndex = 0;
+    private boolean mIsCheater;
+    private int mCurrentNumAnswered;
+    private int mTrueAnswer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +46,15 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_main);
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-            mQuestionsAnswered = savedInstanceState.getBooleanArray(TAG);
+            mIsCheater = savedInstanceState.getBoolean(ANSWER_SHOWN, false);
+            mQuestionAnswered = savedInstanceState.getBooleanArray(ANSWER_SHOWN);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
 
-        mTrueButton = (Button)findViewById(R.id.true_button);
+        mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mFalseButton = (Button)findViewById(R.id.false_button);
+        mFalseButton = (Button) findViewById(R.id.false_button);
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,31 +74,23 @@ public class MainActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex=(mCurrentIndex + 1) % mQuestionBank.length;
-                //mIsCheater = false;
+                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                mIsCheater = false;
                 updateQuestion();
             }
         });
-        homeButton = findViewById(R.id.home_button);
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, InitActivity.class);
-            }
-        });
-        /*mCheatButton = (Button)findViewById(R.id.cheat_button);
+
+        mCheatButton = (Button) findViewById(R.id.cheat_button);
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Start CheatActivity
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
                 Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue);
                 startActivityForResult(intent, REQUEST_CODE_CHEAT);
             }
-        });*/
+        });
 
         updateQuestion();
-
     }
 
     @Override
@@ -107,29 +100,31 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        /*if (requestCode == REQUEST_CODE_CHEAT) {
+        if (requestCode == REQUEST_CODE_CHEAT) {
             if (data == null) {
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
-        }*/
-    }
-
-    private boolean[] mQuestionsAnswered = new boolean[mQuestionBank.length];
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        Log.i(TAG, "onSaveInstanceState");
-        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
-        savedInstanceState.putBooleanArray(TAG, mQuestionsAnswered);
+            mQuestionAnswered[mCurrentIndex] = CheatActivity.wasAnswerShown(data);
+        }
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart() called");
     }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(TAG, "onSaveInstanceState");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBoolean(ANSWER_SHOWN, mIsCheater);
+        savedInstanceState.putBooleanArray(ANSWER_SHOWN, mQuestionAnswered);
+    }
+
 
     @Override
     public void onResume() {
@@ -156,36 +151,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateQuestion() {
-        mTrueButton.setEnabled(!mQuestionsAnswered[mCurrentIndex]);
-        mFalseButton.setEnabled(!mQuestionsAnswered[mCurrentIndex]);
+        mTrueButton.setEnabled(!mQuestionAnswered[mCurrentIndex]);
+        mFalseButton.setEnabled(!mQuestionAnswered[mCurrentIndex]);
         int question=mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
         mCurrentNumAnswered++;
-
-        /*int resultResId = (mTrueAnswer/6)*100;
-        if (mCurrentNumAnswered == mQuestionBank.length + 1) {
-            Toast.makeText(this, Integer.toString(resultResId) + "%", Toast.LENGTH_LONG).show();
-        }*/
-
     }
 
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
 
-        /*if (mIsCheater){
+        if (mIsCheater){
             messageResId = R.string.judgment_toast;
-        } else { */
-            if (userPressedTrue == answerIsTrue) {
+        } else if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.correct_toast;
                 mTrueAnswer++;
-            } else {
-                messageResId = R.string.incorrect_toast;
-            }
+        } else {
+            messageResId = R.string.incorrect_toast;
+        }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
 
-        mQuestionsAnswered[mCurrentIndex] = true;
+        mQuestionAnswered[mCurrentIndex] = true;
         mTrueButton.setEnabled(false);
         mFalseButton.setEnabled(false);
     }
